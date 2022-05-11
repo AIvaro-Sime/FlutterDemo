@@ -1,12 +1,17 @@
-import 'package:flutter_application_1/extensions.dart';
+import 'dart:developer';
+import 'package:flutter_application_1/utils/extensions.dart';
 import 'package:get/get.dart';
 import 'package:nfc_manager/nfc_manager.dart';
+import '../../../use_case/get_all_tpv_use_case.dart';
 
 class NfcController extends GetxController {
+  final getAllTpvUseCase = GetAllTpvUseCase();
+
   @override
   void onInit() {
     super.onInit();
     createNfcReader();
+    loadTpvs();
   }
 
   @override
@@ -30,6 +35,11 @@ class NfcController extends GetxController {
       final id = tagReaded.data["nfca"]["identifier"] as List<int>;
       tag = id.toHexString();
     });
+  }
+
+  void loadTpvs() async {
+    final tpvs = await getAllTpvUseCase();
+    log(tpvs);
   }
 
   void closeNfcReader() async {
